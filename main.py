@@ -56,7 +56,8 @@ def question_4 ():
 def question_6 ():
     print("QUESTION 6")
     rho_values = [0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4] # 0.5 < rho < 1.5
-    rho_test = [0.6, 1.4]
+    # rho_test = [0.6, 1.4]
+    # rho_values = rho_test
     p_loss_data = []
     avg_packets_data = []
     k_values = [10, 25, 50]
@@ -81,20 +82,20 @@ def question_6 ():
     print("Preparing Graphs")
     # Graph 1
     plt.title("PLoss vs Rho Values")
-    plt.legend(['k = 10', 'k = 25', 'k = 50'], loc = 'upper left')
     plt.xlabel('Rho Value')
     plt.ylabel('PLoss')
     for i in p_loss_data:
         plt.plot(rho_values, i)
+    plt.legend(['k = 10', 'k = 25', 'k = 50'], loc = 'upper left')
     plt.show()
     
     # Graph 2
     plt.title("Average Number of Packets vs Rho Values")
-    plt.legend(['k = 10', 'k = 25', 'k = 50'], loc = 'upper left')
     plt.xlabel('Rho Values')
     plt.ylabel('Average Number of Packets')
     for i in avg_packets_data:
         plt.plot(rho_values, i)
+    plt.legend(['k = 10', 'k = 25', 'k = 50'], loc = 'upper left')
     plt.show()
 
 def main ():
