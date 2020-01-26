@@ -17,7 +17,8 @@ class SimulatorK:
         self.events = [] # keeps track of all events
         self.p_idle = 0
         self.p_loss = 0
-        self.En = 0
+        self.En = 0 # avergae num of packets in queue
+        self.packet_id = 0
 
         self.run(lam, alpha)
 
@@ -37,54 +38,73 @@ class SimulatorK:
             time += Generator.generate_exponential_random_var(lam)
             packet_length = Generator.generate_exponential_random_var(1/self.avg_pkt_size)
             if time > self.duration: break
-            current_event = Event.Event('ARRIVAL', time, False, packet_length)
+            current_event = Event.Event('ARRIVAL', time, False, packet_length, self.packet_id)
             self.events.append(current_event)
             self.Ne += 1
+            self.packet_id += 1
+
+    def should_drop(self, queue_size):
+            if(queue_size == self.max_queue_size):
+                return True
+            else:
+                return False
 
     def calculate_departures(self):
         current_time = 0
-        number_packets = 0
-        for event in self.events:
-            if(event.type == 'ARRIVAL' and not event.dropped):
-                if event.time > current_time:
-                    current_time = event.time # skip time forward to this event
-                service_time = event.packet_length/self.transmission_rate
-                departure_time = current_time + service_time
-                if event.time > departure_time:
-                    pass
-                
-                current_event = Event.Event('DEPARTURE', departure_time)
-                self.events.append(current_event)
-                self.Ne += 1
-                current_time = departure_time # skip time forward
-            else:
-                pass
-                # STATS
-                #transmission_time = departure_time - event.time
+        for head_pkt in self.events:
+            # Do not process dropped packets or observation events
+            if not head_pkt.type == "ARRIVAL" or head_pkt.dropped:
+                continue
+
+            # Update current time
+            if head_pkt.time > current_time:
+                    current_time = head_pkt.time # skip time forward to this event
+
+            # Calculate the departure time
+            service_time = head_pkt.packet_length/self.transmission_rate
+            departure_time = current_time + service_time # depatrue time for head packet
+
+            # Check if packet is arriving after departure time
+            if head_pkt.time > departure_time:
+                break 
+
+            # Find packets currently in queue --> arrived between head_pkt arrival and departure time
+            queue_size = 0
+            for pkt in self.events:
+                if pkt.type == "ARRIVAL" and not pkt.dropped and pkt.time >= head_pkt.time and (pkt.time < departure_time):
+                    # only look at arrival packets between head arrival and departure time that haven't been dropped
+                    dropped = self.should_drop(queue_size)
+                    if dropped:
+                        pkt.dropped = True
+                    else:
+                        queue_size += 1
+            
+            # Create departure event
+            current_event = Event.Event('DEPARTURE', departure_time)
+            self.events.append(current_event)
+            self.Ne += 1
+            current_time = departure_time # skip time forward
 
     def observe_events(self):
         packets_in_buffer = 0
         curr_packets_in_buffer = 0
-        num_idle = 0
         num_loss = 0
         for event in self.events:
             if event.type == 'ARRIVAL':
                 if event.dropped:
                     num_loss += 1
-                self.Na += 1
+                else:
+                    self.Na += 1 # increase if we processed the arrival
             elif event.type == 'DEPARTURE':
                 self.Nd += 1
             elif event.type == 'OBSERVER':
                 self.No += 1
                 curr_packets_in_buffer = self.Na - self.Nd
                 # print(f"current packets = {curr_packets_in_buffer}")
-                if curr_packets_in_buffer == 0: 
-                    num_idle += 1 # sum of ticks where buffer was empty
-                # print(f"current idle = {num_idle}")
                 packets_in_buffer += curr_packets_in_buffer # sum of packet waiting in buffer
             else:
                 pass
-        self.p_idle = num_idle / self.No
+        print(f"{num_loss} packets lost")
         self.En = packets_in_buffer / self.No
         self.p_loss = num_loss / self.No
     
