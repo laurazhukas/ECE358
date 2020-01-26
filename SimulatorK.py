@@ -110,7 +110,6 @@ class SimulatorK:
     
     def sort_events(self):
         self.events.sort(key = lambda event: event.time)
-        
 
     def run(self, lam, alpha):
         self.generate_observations(alpha)

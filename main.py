@@ -50,7 +50,7 @@ def question_4 ():
     print(f"Running Simulation at Rho: {rho_value}")
     sim = Simulator.Simulator(L, duration, C, rho_value)
     print(f"Average number of packets: {sim.En}")
-    print(f"Average number of packets: {sim.p_idle}")
+    print(f"P_idle: {sim.p_idle}")
 
 
 def question_6 ():
@@ -79,24 +79,22 @@ def question_6 ():
         avg_packets_data.append(avg_packet_num_at_k)
 
     print("Preparing Graphs")
+    # Graph 1
     plt.title("PLoss vs Rho Values")
     plt.legend(['k = 10', 'k = 25', 'k = 50'], loc = 'upper left')
     plt.xlabel('Rho Value')
     plt.ylabel('PLoss')
-
     for i in p_loss_data:
-        plt.plot(rho_test, i)
+        plt.plot(rho_values, i)
     plt.show()
     
-    # for p_loss, rho in zip(p_loss_data, rho_test):
-    #     plt.plot(rho, p_loss)
-    
+    # Graph 2
     plt.title("Average Number of Packets vs Rho Values")
     plt.legend(['k = 10', 'k = 25', 'k = 50'], loc = 'upper left')
     plt.xlabel('Rho Values')
     plt.ylabel('Average Number of Packets')
     for i in avg_packets_data:
-        plt.plot(rho_test, i)
+        plt.plot(rho_values, i)
     plt.show()
 
 def main ():

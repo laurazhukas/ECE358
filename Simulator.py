@@ -42,7 +42,6 @@ class Simulator:
 
     def calculate_departures(self):
         current_time = 0
-        number_packets = 0
         for event in self.events:
             if(event.type == 'ARRIVAL'):
                 if event.time > current_time:
@@ -56,8 +55,6 @@ class Simulator:
                 current_time = departure_time # skip time forward
             else:
                 pass
-                # STATS
-                #transmission_time = departure_time - event.time
 
     def observe_events(self):
         packets_in_buffer = 0
@@ -71,10 +68,8 @@ class Simulator:
             elif event.type == 'OBSERVER':
                 self.No += 1
                 curr_packets_in_buffer = self.Na - self.Nd
-                # print(f"current packets = {curr_packets_in_buffer}")
                 if curr_packets_in_buffer == 0: 
                     num_idle += 1 # sum of ticks where buffer was empty
-                # print(f"current idle = {num_idle}")
                 packets_in_buffer += curr_packets_in_buffer # sum of packet waiting in buffer
             else:
                 pass
@@ -84,7 +79,6 @@ class Simulator:
     def sort_events(self):
         self.events.sort(key = lambda event: event.time)
         
-
     def run(self, lam, alpha):
         self.generate_observations(alpha)
         self.generate_arrivals(lam)
