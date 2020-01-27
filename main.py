@@ -20,7 +20,7 @@ def question_3 ():
     p_idle = []
     L = 2000
     C = 1000000
-    duration = 10
+    duration = 1000
     for rho in rho_values:
         print(f"Running Simulation at Rho: {rho}")
         sim = Simulator.Simulator(L, duration, C, rho)
@@ -70,7 +70,7 @@ def question_6 ():
     k_values = [10, 25, 50]
     L = 2000
     C = 1000000
-    duration = 10
+    duration = 1000
 
     for k in k_values:
         avg_packet_num_at_k = []
