@@ -29,16 +29,23 @@ def question_3 ():
         print(f"this is the value for sim.En: {sim.p_idle}")
         p_idle.append(sim.p_idle)
     print("Preparing Graphs")
+    # Graph 1
     plt.title("Average Number of Packets vs Rho Values")
     plt.plot(rho_values, average_num_pkts)
     plt.xlabel('Rho Values')
     plt.ylabel('Average Number of Packets')
-    plt.show()
+    # plt.show()
+    plt.savefig('Question3-1.png', bbox_inches='tight')
+    plt.close()
+
+    # Graph 2
     plt.title("Proportion of Time Server Is Idle vs Rho Values")
     plt.xlabel('Rho Values')
     plt.ylabel('Proportion of Time Idle')
     plt.plot(rho_values, p_idle)
-    plt.show()
+    # plt.show()
+    plt.savefig('Question3-2.png', bbox_inches='tight')
+    plt.close()
 
 
 def question_4 ():
@@ -87,7 +94,9 @@ def question_6 ():
     for i in p_loss_data:
         plt.plot(rho_values, i)
     plt.legend(['k = 10', 'k = 25', 'k = 50'], loc = 'upper left')
-    plt.show()
+    # plt.show()
+    plt.savefig('Question6-1.png', bbox_inches='tight')
+    plt.close()
     
     # Graph 2
     plt.title("Average Number of Packets vs Rho Values")
@@ -96,7 +105,9 @@ def question_6 ():
     for i in avg_packets_data:
         plt.plot(rho_values, i)
     plt.legend(['k = 10', 'k = 25', 'k = 50'], loc = 'upper left')
-    plt.show()
+    # plt.show()
+    plt.savefig('Question6-2.png', bbox_inches='tight')
+    plt.close()
 
 def main ():
     print("Running ECE 358 Lab 1")
