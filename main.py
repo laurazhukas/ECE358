@@ -56,7 +56,7 @@ def question_4():
     rho_value = 1.2
     L = 2000
     C = 1000000
-    duration = 1000
+    duration = 10
     print(f"Running Simulation at Rho: {rho_value}")
     sim = SimulatorMM1.SimulatorMM1(L, duration, C, rho_value)
     print(f"Average number of packets: {sim.En}")
