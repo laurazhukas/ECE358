@@ -1,6 +1,7 @@
 import random
 import math
 
+
 def generate_exponential_random_var(lam):
     random.seed()
     u = random.random()

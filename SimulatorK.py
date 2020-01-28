@@ -1,50 +1,44 @@
 import Event
 import Generator
 
+
 class SimulatorK:
 
     def __init__(self, L, duration, C, rho, k):
-        self.avg_pkt_size = L # average package size
-        self.duration = duration # simulation duration time
-        self.transmission_rate = C
-        lam = (rho*C)/L
-        alpha = 5*lam
-        self.Na = 0 # number of arrivals
-        self.Nd = 0 # number of departures
-        self.No = 0 # number of observations
-        self.max_queue_size = k
-        self.Ne = 0 # number of events
-        self.events = [] # keeps track of all events
-        self.p_idle = 0
+        self.avg_pkt_size = L  # average package size (bits)
+        self.duration = duration  # simulation duration time
+        self.transmission_rate = C  # transmission time (bps)
+        self.events = []  # buffer/queue to hold events
+        self.max_queue_size = k  # max queue size for finite M/M/K/1 queue
         self.p_loss = 0
-        self.En = 0 # avergae num of packets in queue
-        self.packet_id = 0
+        self.En = 0  # average num of packets in queue
 
-        self.run(lam, alpha)
+        lam = (rho * C) / L  # average number of packets arrived (packets per sec)
+        alpha = 5 * lam  # average number of observer events per second
+
+        self.run(lam, alpha)  # start the simulation
 
     def generate_observations(self, alpha):
-        # alpha is the of observation events per second
         time = 0
-        while(True):
+        while True:
             time += Generator.generate_exponential_random_var(alpha)
-            if time > self.duration: break
+            if time > self.duration:
+                break
             current_event = Event.Event('OBSERVER', time, False)
             self.events.append(current_event)
-            self.Ne += 1
             
     def generate_arrivals(self, lam):
         time = 0
-        while(True):
+        while True:
             time += Generator.generate_exponential_random_var(lam)
             packet_length = Generator.generate_exponential_random_var(1/self.avg_pkt_size)
-            if time > self.duration: break
-            current_event = Event.Event('ARRIVAL', time, False, packet_length, self.packet_id)
+            if time > self.duration:
+                break
+            current_event = Event.Event('ARRIVAL', time, False, packet_length)
             self.events.append(current_event)
-            self.Ne += 1
-            self.packet_id += 1
 
     def should_drop(self, queue_size):
-            if(queue_size == self.max_queue_size):
+            if queue_size == self.max_queue_size:
                 return True
             else:
                 return False
@@ -58,11 +52,11 @@ class SimulatorK:
 
             # Update current time
             if head_pkt.time > current_time:
-                    current_time = head_pkt.time # skip time forward to this event
+                    current_time = head_pkt.time  # skip time forward to this event
 
             # Calculate the departure time
             service_time = head_pkt.packet_length/self.transmission_rate
-            departure_time = current_time + service_time # depatrue time for head packet
+            departure_time = current_time + service_time  # departure time for head packet
 
             # Check if packet is arriving after departure time
             if head_pkt.time > departure_time:
@@ -82,34 +76,33 @@ class SimulatorK:
             # Create departure event
             current_event = Event.Event('DEPARTURE', departure_time)
             self.events.append(current_event)
-            self.Ne += 1
-            current_time = departure_time # skip time forward
+            current_time = departure_time  # skip time forward
 
     def observe_events(self):
         packets_in_buffer = 0
-        curr_packets_in_buffer = 0
-        num_loss = 0
+        packets_lost = 0
+        Nd = 0  # number of departures
+        Na = 0  # number of arrivals
+        No = 0  # number of observations
         for event in self.events:
             if event.type == 'ARRIVAL':
                 if event.dropped:
-                    num_loss += 1
+                    packets_lost += 1
                 else:
-                    self.Na += 1 # increase if we processed the arrival
+                    Na += 1  # increase if we processed the arrival
             elif event.type == 'DEPARTURE':
-                self.Nd += 1
+                Nd += 1
             elif event.type == 'OBSERVER':
-                self.No += 1
-                curr_packets_in_buffer = self.Na - self.Nd
-                # print(f"current packets = {curr_packets_in_buffer}")
-                packets_in_buffer += curr_packets_in_buffer # sum of packet waiting in buffer
+                No += 1
+                curr_packets_in_buffer = Na - Nd
+                packets_in_buffer += curr_packets_in_buffer  # sum of packet waiting in buffer
             else:
                 pass
-        print(f"{num_loss} packets lost")
-        self.En = packets_in_buffer / self.No
-        self.p_loss = num_loss / self.No
+        self.En = packets_in_buffer / No
+        self.p_loss = packets_lost / No
     
     def sort_events(self):
-        self.events.sort(key = lambda event: event.time)
+        self.events.sort(key=lambda event: event.time)
 
     def run(self, lam, alpha):
         self.generate_observations(alpha)

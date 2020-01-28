@@ -1,19 +1,22 @@
 import Generator
 import statistics
-import numpy as np
 import Simulator
 import SimulatorK
 import matplotlib.pyplot as plt
 
-def question_1 ():
+
+def question_1():
     print("QUESTION 1")
     num_list = []
     for i in range(0, 1000):
         num_list.append(Generator.generate_exponential_random_var(75))
     mean = statistics.mean(num_list)
-    print(f"The random variable mean is: {mean}")
+    variance = statistics.variance(num_list)
+    print(f"The exponential random variable mean is: {mean}")
+    print(f"The exponential random variable variance is {variance}")
 
-def question_3 ():
+
+def question_3():
     print("QUESTION 3")
     rho_values = [0.35, 0.45, 0.55, 0.65, 0.75, 0.85] # 0.25 < rho < 0.95
     average_num_pkts = []
@@ -48,7 +51,7 @@ def question_3 ():
     plt.close()
 
 
-def question_4 ():
+def question_4():
     print("QUESTION 4")
     rho_value = 1.2
     L = 2000
@@ -60,7 +63,7 @@ def question_4 ():
     print(f"P_idle: {sim.p_idle}")
 
 
-def question_6 ():
+def question_6():
     print("QUESTION 6")
     rho_values = [0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4] # 0.5 < rho < 1.5
     # rho_test = [0.6, 1.4]
@@ -109,12 +112,14 @@ def question_6 ():
     plt.savefig('Question6-2.png', bbox_inches='tight')
     plt.close()
 
-def main ():
+
+def main():
     print("Running ECE 358 Lab 1")
     question_1()
     question_3()
     question_4()
     question_6()
+
 
 if __name__ == "__main__":
     main()
