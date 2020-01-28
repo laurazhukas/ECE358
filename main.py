@@ -18,7 +18,7 @@ def question_1():
 
 def question_3():
     print("QUESTION 3")
-    rho_values = [0.35, 0.45, 0.55, 0.65, 0.75, 0.85] # 0.25 < rho < 0.95
+    rho_values = [0.35, 0.45, 0.55, 0.65, 0.75, 0.85]  # 0.25 < rho < 0.95
     average_num_pkts = []
     p_idle = []
     L = 2000
@@ -66,8 +66,6 @@ def question_4():
 def question_6():
     print("QUESTION 6")
     rho_values = [0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4] # 0.5 < rho < 1.5
-    # rho_test = [0.6, 1.4]
-    # rho_values = rho_test
     p_loss_data = []
     avg_packets_data = []
     k_values = [10, 25, 50]
