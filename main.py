@@ -20,7 +20,7 @@ def question_3 ():
     p_idle = []
     L = 2000
     C = 1000000
-    duration = 1000
+    duration = 100
     for rho in rho_values:
         print(f"Running Simulation at Rho: {rho}")
         sim = Simulator.Simulator(L, duration, C, rho)
@@ -35,7 +35,7 @@ def question_3 ():
     plt.xlabel('Rho Values')
     plt.ylabel('Average Number of Packets')
     # plt.show()
-    plt.savefig('Question3-1.png', bbox_inches='tight')
+    plt.savefig('Question3-1-Dur-100.png', bbox_inches='tight')
     plt.close()
 
     # Graph 2
@@ -44,7 +44,7 @@ def question_3 ():
     plt.ylabel('Proportion of Time Idle')
     plt.plot(rho_values, p_idle)
     # plt.show()
-    plt.savefig('Question3-2.png', bbox_inches='tight')
+    plt.savefig('Question3-2-Dur-100.png', bbox_inches='tight')
     plt.close()
 
 
@@ -53,7 +53,7 @@ def question_4 ():
     rho_value = 1.2
     L = 2000
     C = 1000000
-    duration = 1000
+    duration = 100
     print(f"Running Simulation at Rho: {rho_value}")
     sim = Simulator.Simulator(L, duration, C, rho_value)
     print(f"Average number of packets: {sim.En}")
@@ -70,7 +70,7 @@ def question_6 ():
     k_values = [10, 25, 50]
     L = 2000
     C = 1000000
-    duration = 1000
+    duration = 100
 
     for k in k_values:
         avg_packet_num_at_k = []
@@ -95,7 +95,7 @@ def question_6 ():
         plt.plot(rho_values, i)
     plt.legend(['k = 10', 'k = 25', 'k = 50'], loc = 'upper left')
     # plt.show()
-    plt.savefig('Question6-1.png', bbox_inches='tight')
+    plt.savefig('Question6-1-dur-100.png', bbox_inches='tight')
     plt.close()
     
     # Graph 2
@@ -106,7 +106,7 @@ def question_6 ():
         plt.plot(rho_values, i)
     plt.legend(['k = 10', 'k = 25', 'k = 50'], loc = 'upper left')
     # plt.show()
-    plt.savefig('Question6-2.png', bbox_inches='tight')
+    plt.savefig('Question6-2-dur-100.png', bbox_inches='tight')
     plt.close()
 
 def main ():
