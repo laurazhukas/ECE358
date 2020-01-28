@@ -1,7 +1,7 @@
 import Generator
 import statistics
-import Simulator
-import SimulatorK
+import SimulatorMM1
+import SimulatorMM1K
 import matplotlib.pyplot as plt
 
 
@@ -26,7 +26,7 @@ def question_3():
     duration = 10
     for rho in rho_values:
         print(f"Running Simulation at Rho: {rho}")
-        sim = Simulator.Simulator(L, duration, C, rho)
+        sim = SimulatorMM1.SimulatorMM1(L, duration, C, rho)
         print(f"this is the value for sim.En: {sim.En}")
         average_num_pkts.append(sim.En)
         print(f"this is the value for sim.En: {sim.p_idle}")
@@ -58,7 +58,7 @@ def question_4():
     C = 1000000
     duration = 1000
     print(f"Running Simulation at Rho: {rho_value}")
-    sim = Simulator.Simulator(L, duration, C, rho_value)
+    sim = SimulatorMM1.SimulatorMM1(L, duration, C, rho_value)
     print(f"Average number of packets: {sim.En}")
     print(f"P_idle: {sim.p_idle}")
 
@@ -80,7 +80,7 @@ def question_6():
         p_loss_at_k = []
         for rho in rho_values:
             print(f"Running Simulation at K: {k}, Rho: {rho}")
-            sim = SimulatorK.SimulatorK(L, duration, C, rho, k)
+            sim = SimulatorMM1K.SimulatorMM1K(L, duration, C, rho, k)
             print(f"this is the value for sim.En: {sim.En}")
             avg_packet_num_at_k.append(sim.En)
             print(f"this is the value for sim.p_loss: {sim.p_loss}")

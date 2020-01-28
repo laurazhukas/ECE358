@@ -2,7 +2,7 @@ import Event
 import Generator
 
 
-class Simulator:
+class SimulatorMM1:
 
     def __init__(self, L, duration, C, rho):
         self.avg_pkt_size = L  # average package size (bits)
