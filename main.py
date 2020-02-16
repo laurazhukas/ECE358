@@ -35,7 +35,7 @@ def question_3 ():
     plt.xlabel('Rho Values')
     plt.ylabel('Average Number of Packets')
     # plt.show()
-    plt.savefig('Question3-1.png', bbox_inches='tight')
+    plt.savefig('Question3-1-Dur1000.png', bbox_inches='tight')
     plt.close()
 
     # Graph 2
@@ -44,7 +44,7 @@ def question_3 ():
     plt.ylabel('Proportion of Time Idle')
     plt.plot(rho_values, p_idle)
     # plt.show()
-    plt.savefig('Question3-2.png', bbox_inches='tight')
+    plt.savefig('Question3-2-Dur1000.png', bbox_inches='tight')
     plt.close()
 
 
@@ -95,7 +95,7 @@ def question_6 ():
         plt.plot(rho_values, i)
     plt.legend(['k = 10', 'k = 25', 'k = 50'], loc = 'upper left')
     # plt.show()
-    plt.savefig('Question6-1.png', bbox_inches='tight')
+    plt.savefig('Question6-1-Dur1000.png', bbox_inches='tight')
     plt.close()
     
     # Graph 2
@@ -106,7 +106,7 @@ def question_6 ():
         plt.plot(rho_values, i)
     plt.legend(['k = 10', 'k = 25', 'k = 50'], loc = 'upper left')
     # plt.show()
-    plt.savefig('Question6-2.png', bbox_inches='tight')
+    plt.savefig('Question6-2-Dur1000.png', bbox_inches='tight')
     plt.close()
 
 def main ():
