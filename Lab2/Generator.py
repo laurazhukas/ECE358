@@ -8,6 +8,6 @@ def generate_exponential_random_var(lam):
 
 def exponential_backoff(backoff_counter):
     random.seed()
-    r = random.randrange(0,(2**backoff_counter), 1)  # TODO: verify this is correct NOTE: no -1 because non inclusive
-    return r*512 # NOTE: 512 bit time
+    r = random.randrange(0,(2**backoff_counter), 1)  # TODO: verify this is correct NOTE: no -1 because non-inclusive
+    return int(r*512) # NOTE: 512 bit time
 

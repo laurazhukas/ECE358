@@ -4,24 +4,22 @@ import Network
 
 class Node:
 
-    def __init__(self, duration, lam, _network, _pkt_length, prop_delay, packet_queue=[], bus_collision=0, wait_time=0):
+    def __init__(self, duration, lam, _network, pkt_length, prop_delay):
         # set member variables
         self.sim_duration = duration
-        self.L = _pkt_length
+        self.L = pkt_length
         self.lam = lam
         self.prop_delay = prop_delay
         self.network = _network
-        self.bus_collision = bus_collision # counter for when medium is busy when sensed
-        self.wait = wait_time # time a node must wait, during exponential backoff
-        # self.generate_pkt_arrivals(0.01) # initalize packet arrival time list
 
         # initial conditions
         self.state = "IDLE"
-        self.time = Generator.generate_exponential_random_var(self.lam)
+        self.time = Generator.generate_exponential_random_var(self.lam) # time of first pkt arrival
         self.delay = 0
         self.backoff_counter = 0
         self.completed_pkts_sent = 0
         self.R = 1000000 # 1Mbps
+        self.transmissions_attempted = 0
 
         print("Node made")
 
@@ -31,23 +29,23 @@ class Node:
     def idle(self):
         print("Idle")
         # update idle --> sensing
-        if self.time == 0:
+        if self.time <= 0:
             self.state = "SENSING"
             self.start_sensing_time()
 
     def sensing(self):
         print("Sensing")
         # update sensing --> waiting
-        if self.network.get_state() != "IDLE":
-            # executes if network is not free
-            # TODO: check this code
-            self.state = "WAITING" # update node state
-            self.time = Generator.exponential_backoff(self.backoff_counter) # random wait time
-
-            print("busy network")  # TODO: delete when done   
+        # if self.network.get_state() != "IDLE":
+        #     # executes if network is not free
+        #     # TODO: check this code
+        #     self.state = "WAITING" # update node state
+        #     self.time = Generator.exponential_backoff(self.backoff_counter) # random wait time
+        #     print("busy network")  # TODO: delete when done  
+        #     return 
             
         # update sensing --> transmitting
-        if self.time == 0:
+        if self.time <= 0:
             self.state = "TRANSMITTING"  # update node state
             self.network.add_traffic()  # update network state
             self.time = self.prop_delay + self.L/self.R  # time packet needs to fully transmit
@@ -61,15 +59,17 @@ class Node:
 
     def transmitting(self):
         print("Transmitting")
+        self.transmissions_attempted += 1
         # update trasmitting --> collision --> backoff
         if self.network.get_state() == "COLLISION":
+            print("collision! :(")
             self.network.remove_traffic() # update network
             self.collision() # collision occurs
             return
 
         # update transmitting --> idle
         # packet has been fully received
-        if self.time == 0:
+        if self.time <= 0:
             self.state = "IDLE" # update node state
             self.network.remove_traffic() # update network state
             self.time = Generator.generate_exponential_random_var(self.lam) # generate next arrival time
@@ -78,15 +78,23 @@ class Node:
 
     def collision(self):
         print("Collision")
-        # update collision --> backoff
-        self.currentState = "BACKOFF"
-
-        # update backoff counter
-        if self.backoff_counter < 10:
+        
+        if self.backoff_counter <= 10:
+            # update collision --> backoff
+            self.currentState = "BACKOFF"
+            # set exponential backoff time
+            self.time = Generator.exponential_backoff(self.backoff_counter)
+            # increment counter
             self.backoff_counter += 1
-
-        # set exponential backoff time
-        self.time = Generator.exponential_backoff(self.backoff_counter)
+        # drop packet
+        else:
+            # update collision --> idle (packet dropped)
+            self.state = "IDLE" 
+            self.network.remove_traffic() # update network state
+            self.time = Generator.generate_exponential_random_var(self.lam) # generate next arrival time
+            self.backoff_counter = 0 # reset backoff counter
+            return
+        
     
     def backoff(self):
         # update backoff --> sensing
@@ -124,3 +132,5 @@ class Node:
     def get_delay_time(self):
         return self.delay
     
+    def get_total_attempted(self):
+        return self.transmissions_attempted
