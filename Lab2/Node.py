@@ -21,6 +21,7 @@ class Node:
         self.delay = 0
         self.backoff_counter = 0
         self.completed_pkts_sent = 0
+        self.R = 1000000 # 1Mbps
 
         print("Node made")
 
@@ -49,7 +50,7 @@ class Node:
         if self.time == 0:
             self.state = "TRANSMITTING"  # update node state
             self.network.add_traffic()  # update network state
-            self.time = self.prop_delay + self.L  # time packet needs to fully transmit
+            self.time = self.prop_delay + self.L/self.R  # time packet needs to fully transmit
 
     def waiting(self):
         print("Waiting")

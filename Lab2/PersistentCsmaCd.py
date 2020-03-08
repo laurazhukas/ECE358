@@ -28,7 +28,7 @@ class PersistentCsmaCd:
     def generate_nodes(self):
         for n in range(0, self.N):
             self.node_list.append(Node.Node(self.duration, self.lam, self.network, self.L, self.calculate_prop_delay(n)))
-    
+
     def start_simulation(self):
         print("Starting Simulation")
         time = 0
@@ -57,7 +57,8 @@ class PersistentCsmaCd:
             print("FUCK") # TODO: total sent is coming out to 0... nodes seem to be stuck in transmission
 
         self.throughput = total_sent/self.duration
-        self.efficiency = (total_sent - total_delay)/total_sent
+        print(f"this is total delay {total_delay}")
+        self.efficiency = (total_sent - total_delay)/total_sent #should we be using the (1/(1+5tprop/ttrans)) formula?
 
     def get_throughput(self):
         return self.throughput
