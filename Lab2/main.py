@@ -23,7 +23,10 @@ def simulate_persistent_case():
         throughput_data.append(sim.get_efficiency())
         efficiency_data.append(sim.get_throughput())
 
-    plt.figure()
+    # plt.figure()
+    plt.title("Efficiency vs # of Nodes")
+    plt.xlabel('Number of Nodes')
+    plt.ylabel('Efficiency')
     plt.plot(n, efficiency_data)
     plt.show()
 
