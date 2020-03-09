@@ -55,7 +55,7 @@ class PersistentSimulation:
                 node.experienced_collision() # handle collision on receiving node
             # check if bus is busy --> wait and try to transmit when sending node is finished
             elif t_first_bit <= node.head_pkt_send_time <= t_last_bit:
-                node.reschedule_bus_sense(t_last_bit)
+                node.reschedule_bus_sense(t_last_bit) # for persistent case
         
         sending_node = self.node_list[sender_id]
         
@@ -78,7 +78,7 @@ class PersistentSimulation:
     ################# METRICS ################# 
     def calculate_metrics(self):
         self.efficiency = self.trans_success / self.trans_attempts
-        self.throughput = self.trans_success * self.packet_length / self.sim_duration
+        self.throughput = (self.trans_success * self.packet_length * (10**-6) )/ (self.sim_duration)
 
     def get_efficiency(self):
         return self.efficiency
@@ -94,7 +94,7 @@ class PersistentSimulation:
 
         # process packets for duration of simulation
         while curr_time <= self.sim_duration:
-            print("Current Time: " + str(curr_time))
+            # print("Current Time: " + str(curr_time))
             id_sending_node, pkt_send_time = self.next_transmitting_node()
             self.check_for_collisions(id_sending_node, pkt_send_time)
             curr_time = pkt_send_time # skip time forward

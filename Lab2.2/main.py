@@ -30,7 +30,7 @@ def simulate_persistent_case():
 
     ################# PLOT EFFICIENCY ################# 
     plt.figure()
-    plt.title("Efficiency vs # of Nodes")
+    plt.title("Efficiency vs Number of Nodes")
     plt.xlabel('Number of Nodes')
     plt.ylabel('Efficiency')
     for i, lam in enumerate(A):
@@ -40,9 +40,9 @@ def simulate_persistent_case():
 
     ################# PLOT THROUGHPUT ################# 
     plt.figure()
-    plt.title("Throughput vs # of Nodes")
+    plt.title("Throughput vs Number of Nodes")
     plt.xlabel('Number of Nodes')
-    plt.ylabel('Throughput (bits/time unit)')
+    plt.ylabel('Throughput (Mbps)')
     for i, lam in enumerate(A):
         plt.plot(n, throughput_data[i], label='Arrival Rate: T= {}'.format(lam))
     plt.legend()
