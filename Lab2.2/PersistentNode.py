@@ -6,31 +6,31 @@ class PersistentNode:
         self.id = _id
         self.lam = _lam
 
-        # initialize member varaibles
-        self.head_pkt_send_time = generate_pkt_arrival_time(0, self.lam) # TODO: make sure works
+        # initialize member variables
+        self.head_pkt_send_time = generate_pkt_arrival_time(0, self.lam)
         self.collision_counter = 0
-        self.packet_dropped_counter = 0 # TODO: remove unneeded code
 
     def experienced_collision(self):
-        
-        self.collision_counter += 1 # increment for backoff
-        # packet dropped
-        if self.collision_counter > 10:
-            self.collision_counter = 0 # reset counter
-            self.packet_dropped_counter += 1 # increment
-            self.head_pkt_send_time = generate_pkt_arrival_time(self.head_pkt_send_time, self.lam) # new packet arrival time
-        # backoff
-        else:
-            self.head_pkt_send_time = generate_exp_backoff_time(self.head_pkt_send_time, self.collision_counter) # new scheduled departure time
+       self.collision_counter += 1 # increment for backoff
+
+       # packet dropped
+       if self.collision_counter > 10:
+           self.collision_counter = 0 # reset counter
+           self.head_pkt_send_time = generate_pkt_arrival_time(self.head_pkt_send_time, self.lam)  # new packet arrival time      
+       # backoff
+       else:
+           self.head_pkt_send_time = generate_exp_backoff_time(self.head_pkt_send_time, self.collision_counter)  # new scheduled departure time
 
     def reschedule_bus_sense(self, new_time):
-        # node sensed bus was busy --> node waits to transmit until last bit of currently transmitting frame arrives
+        # node sensed bus was busy --> node waits to try to transmit until last bit of currently transmitting frame arrives
         self.head_pkt_send_time = new_time
     
+    # for sending node
     def handle_sending_collisions(self, max_prop_delay, trans_delay):
         self.experienced_collision() # check whether to drop or backoff
         self.head_pkt_send_time = max_prop_delay + trans_delay + self.head_pkt_send_time # update time until after unsuccessful transmission completed
        
+    # for sending node
     def completed_transmission(self):
         self.collision_counter = 0 # reset
         self.head_pkt_send_time = generate_pkt_arrival_time(self.head_pkt_send_time, self.lam) # new packet arrival time
