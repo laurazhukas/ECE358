@@ -17,7 +17,7 @@ class NonpersistentNode:
 
         # packet dropped
         if self.collision_counter > 10:
-            reset_counters()
+            self.reset_counters()
             # self.packet_dropped_counter += 1 # increment # TODO: delete
             self.head_pkt_send_time = generate_pkt_arrival_time(self.head_pkt_send_time, self.lam) # new packet arrival time
         # backoff

@@ -32,7 +32,7 @@ def simulate_persistent_case():
     plt.xlabel('Number of Nodes')
     plt.ylabel('Efficiency')
     for i, lam in enumerate(A):
-        plt.plot(n, efficiency_data[i], label='Arrival Rate: T= {}'.format(lam))
+        plt.plot(n, efficiency_data[i], label='Arrival Rate = {}'.format(lam))
     plt.legend()
     # plt.show()
     plt.savefig('Persistent-Eff-Dur1000.png', bbox_inches='tight')
@@ -43,7 +43,7 @@ def simulate_persistent_case():
     plt.xlabel('Number of Nodes')
     plt.ylabel('Throughput (Mbps)')
     for i, lam in enumerate(A):
-        plt.plot(n, throughput_data[i], label='Arrival Rate: T= {}'.format(lam))
+        plt.plot(n, throughput_data[i], label='Arrival Rate = {}'.format(lam))
     plt.legend()
     # plt.show()
     plt.savefig('Persistent-Thrput-Dur1000.png', bbox_inches='tight')
@@ -77,7 +77,7 @@ def simulate_nonpersistent_case():
     plt.xlabel('Number of Nodes')
     plt.ylabel('Efficiency')
     for i, lam in enumerate(A):
-        plt.plot(n, efficiency_data[i], label='Arrival Rate: T= {}'.format(lam))
+        plt.plot(n, efficiency_data[i], label='Arrival Rate = {}'.format(lam))
     plt.legend()
     # plt.show()
     plt.savefig('Non-Persistent-Eff-Dur1000.png', bbox_inches='tight')
@@ -88,7 +88,7 @@ def simulate_nonpersistent_case():
     plt.xlabel('Number of Nodes')
     plt.ylabel('Throughput (Mbps)')
     for i, lam in enumerate(A):
-        plt.plot(n, throughput_data[i], label='Arrival Rate: T= {}'.format(lam))
+        plt.plot(n, throughput_data[i], label='Arrival Rate = {}'.format(lam))
     plt.legend()
     # plt.show()
     plt.savefig('Non-Persistent-Thrput-Dur1000.png', bbox_inches='tight')
