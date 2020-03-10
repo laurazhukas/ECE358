@@ -43,7 +43,9 @@ def plot_efficiency(efficiency_data, N, A, case):
     for i, lam in enumerate(A):
         plt.plot(N, efficiency_data[i], label='Arrival Rate: T= {}'.format(lam))
     plt.legend()
-    plt.show()
+    # plt.show()
+    plt.savefig(str(case)+"-Eff-Dur1000.png", bbox_inches='tight')
+    plt.close()
 
 def plot_throughput(throughput_data, N, A, case):
     plt.figure()
@@ -53,7 +55,9 @@ def plot_throughput(throughput_data, N, A, case):
     for i, lam in enumerate(A):
         plt.plot(N, throughput_data[i], label='Arrival Rate: T= {}'.format(lam))
     plt.legend()
-    plt.show()
+    # plt.show()
+    plt.savefig(str(case)+"-Thrput-Dur1000.png", bbox_inches='tight')
+    plt.close()
 
 def main():    
     print("Starting Lab 2:")
