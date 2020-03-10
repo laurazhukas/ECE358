@@ -17,13 +17,14 @@ def simulate_persistent_case():
     A = [7, 10, 20] # packets/second
 
     n_test = 10 # TODO: delete
-    t_test = 500 # TODO: delete
+    t_test = 100 # TODO: delete
 
     throughput_data = [[], [], []]
     efficiency_data = [[], [], []]
 
     ################# RUN SIMULATION ################# 
     for i, lam in enumerate(A):
+        print("lamda: " + str(lam))
         for j , node_count in enumerate(n):
             sim = PersistentSimulation.PersistentSimulation(lam, node_count, t_test, d, s, L, R)
             throughput_data[i].append(sim.get_throughput())
@@ -31,7 +32,7 @@ def simulate_persistent_case():
 
     ################# PLOT EFFICIENCY ################# 
     plt.figure()
-    plt.title("Efficiency vs Number of Nodes")
+    plt.title("Efficiency vs Number of Nodes: Persistent")
     plt.xlabel('Number of Nodes')
     plt.ylabel('Efficiency')
     for i, lam in enumerate(A):
@@ -41,7 +42,7 @@ def simulate_persistent_case():
 
     ################# PLOT THROUGHPUT ################# 
     plt.figure()
-    plt.title("Throughput vs Number of Nodes")
+    plt.title("Throughput vs Number of Nodes: Persistent")
     plt.xlabel('Number of Nodes')
     plt.ylabel('Throughput (Mbps)')
     for i, lam in enumerate(A):
@@ -62,13 +63,14 @@ def simulate_nonpersistent_case():
     A = [7, 10, 20] # packets/second
 
     n_test = 10 # TODO: delete
-    t_test = 500 # TODO: delete
+    t_test = 100 # TODO: delete
 
     throughput_data = [[], [], []]
     efficiency_data = [[], [], []]
 
     ################# RUN SIMULATION ################# 
     for i, lam in enumerate(A):
+        print("lamda: " + str(lam))
         for j , node_count in enumerate(n):
             sim = NonpersistentSimulation.NonpersistentSimulation(lam, node_count, t_test, d, s, L, R)
             throughput_data[i].append(sim.get_throughput())
@@ -95,7 +97,7 @@ def simulate_nonpersistent_case():
     plt.show()
 
 def main():
-    # print("Starting Lab 2")
+    print("Persistent Case")
     # simulate_persistent_case()
 
     print("Non-Persistent Case")

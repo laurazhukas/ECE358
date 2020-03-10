@@ -54,8 +54,9 @@ class NonpersistentSimulation:
                 max_prop_delay = max(max_prop_delay, t_prop) # update
                 node.experienced_collision() # handle collision on receiving node
             # check if bus is busy --> add exp backoff to current sensing time
-            elif t_first_bit <= node.head_pkt_send_time <= t_last_bit:
+            while t_first_bit <= node.head_pkt_send_time <= t_last_bit:
                 node.reschedule_bus_sense_nonpersistent() # for nonpersistent case
+
         
         sending_node = self.node_list[sender_id]
         
