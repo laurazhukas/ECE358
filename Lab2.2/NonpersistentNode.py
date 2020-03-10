@@ -6,19 +6,17 @@ class NonpersistentNode:
         self.id = _id
         self.lam = _lam
 
-        # initialize member varaibles
-        self.head_pkt_send_time = generate_pkt_arrival_time(0, self.lam) # TODO: make sure works
+        # initialize member variables
+        self.head_pkt_send_time = generate_pkt_arrival_time(0, self.lam)
         self.collision_counter = 0
         self.waiting_counter = 0
-        self.packet_dropped_counter = 0 # TODO: remove unneeded code
 
     def experienced_collision(self):
-        self.collision_counter += 1 # increment for backoff
+        self.collision_counter += 1  # increment for backoff
 
         # packet dropped
         if self.collision_counter > 10:
             reset_counters()
-            # self.packet_dropped_counter += 1 # increment # TODO: delete
             self.head_pkt_send_time = generate_pkt_arrival_time(self.head_pkt_send_time, self.lam) # new packet arrival time
         # backoff
         else:
@@ -26,20 +24,21 @@ class NonpersistentNode:
 
     def reschedule_bus_sense_nonpersistent(self):
         # node sensed bus was busy --> node waits an random exp time to try to transmit again
-        self.waiting_counter += 1
+        self.waiting_counter += 1  # update
 
         # drop packet
         if self.waiting_counter > 10:
             self.reset_counters()
-            # self.packet_dropped_counter += 1 # increment # TODO: delete
             self.head_pkt_send_time = generate_pkt_arrival_time(self.head_pkt_send_time, self.lam) # new packet arrival time
         else:
             self.head_pkt_send_time = generate_exp_backoff_time(self.head_pkt_send_time, self.waiting_counter) # new scheduled departure time
     
+    # for sending node
     def handle_sending_collisions(self, max_prop_delay, trans_delay):
         self.experienced_collision() # check whether to drop or backoff
         self.head_pkt_send_time = max_prop_delay + trans_delay + self.head_pkt_send_time # update time until after unsuccessful transmission completed
        
+    # for sending node
     def completed_transmission(self):
         self.collision_counter = 0 # reset
         self.waiting_counter = 0 # reset
