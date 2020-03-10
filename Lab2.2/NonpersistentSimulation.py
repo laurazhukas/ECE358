@@ -33,29 +33,40 @@ class NonpersistentSimulation:
 
         return (index, first_scheduled_dep_time)
 
-    def check_for_collisions(self, sender_id, t_sent):
+    def transmit_packet(self, sender_id, t_sent):
 
+        # initialize    
         collision_occurred = False
         max_prop_delay = 0
-        self.trans_attempts += 1 # sending node trying to transmit
 
+        # sending node trying to transmit
+        self.trans_attempts += 1
+
+        # check all other nodes on the bus for collision or bus sensing
         for node in self.node_list:
             # do not consider the sending node
             if node.id == sender_id:
                 continue
-            t_prop = abs(sender_id - node.id) * self.time_prop_one_link # TODO: scaling??? *(10**6)
-            t_first_bit = t_sent + t_prop
-            t_last_bit = t_first_bit + self.time_trans
+
+            # calculations for specific node
+            t_prop = abs(sender_id - node.id) * self.time_prop_one_link  # (d between sender and receiver)*(prop for one link)
+            t_first_bit = t_sent + t_prop  # first bit arrival at node of interest
+            t_last_bit = t_first_bit + self.time_trans  # last bit arrival at node of interest
             
             # check if a node will try to transmit before receiving first bit --> COLLISION
             if t_first_bit >= node.head_pkt_send_time:
-                self.trans_attempts += 1 # node on bus also tries to transmit
+                # node of interest on bus also tries to transmit
                 collision_occurred = True # collision occurs
+                self.trans_attempts += 1 # update
                 max_prop_delay = max(max_prop_delay, t_prop) # update
+
                 node.experienced_collision() # handle collision on receiving node
+
             # check if bus is busy --> add exp backoff to current sensing time
             while t_first_bit <= node.head_pkt_send_time <= t_last_bit:
-                node.reschedule_bus_sense_nonpersistent() # for nonpersistent case
+                node.reschedule_bus_sense_nonpersistent() # handle wait on receiving node for non-persistent case
+
+
 
         
         sending_node = self.node_list[sender_id]
@@ -97,7 +108,7 @@ class NonpersistentSimulation:
         while curr_time <= self.sim_duration:
             # print("Current Time: " + str(curr_time))
             id_sending_node, pkt_send_time = self.next_transmitting_node()
-            self.check_for_collisions(id_sending_node, pkt_send_time)
+            self.transmit_packet(id_sending_node, pkt_send_time)
             curr_time = pkt_send_time # skip time forward
         
         # set metric variabless
